@@ -45,4 +45,10 @@
     <string name="Group">Group</string>
     <string name="Home">Home</string>
 
+    <string name="friend_1">friend_1</string>
+    <string name="friend_2">friend_2</string>
+    <string name="friend_3">friend_3</string>
+    <string name="friend_4">friend_4</string>
+    <string name="GroupA_name">GroupA</string>
+
 </resources>
