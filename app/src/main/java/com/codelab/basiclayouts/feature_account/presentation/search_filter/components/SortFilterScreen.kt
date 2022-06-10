@@ -23,12 +23,11 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
-import com.codelab.basiclayouts.Screen
+import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.feature_account.presentation.record_list.components.HexToJetpackColor
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.FilterViewModel
 import com.codelab.basiclayouts.ui.theme.MySootheTheme

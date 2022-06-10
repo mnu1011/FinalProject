@@ -1,15 +1,11 @@
 package com.codelab.basiclayouts
 
-import android.os.Bundle
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,11 +23,10 @@ import com.codelab.basiclayouts.feature_account.presentation.search_filter.Filte
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.FilterScreen
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.SearchScreen
 import com.codelab.basiclayouts.feature_account.presentation.track_expense.RecordingViewModel
-import com.codelab.basiclayouts.feature_account.presentation.track_expense.component.RecordingPage
 import com.codelab.basiclayouts.feature_account.presentation.track_expense.component.RecordingPageScreen
 import com.codelab.basiclayouts.feature_cards.presentation.CardViewModel
 import com.codelab.basiclayouts.feature_cards.presentation.card.components.CardScreen
-import com.google.gson.Gson
+import com.codelab.basiclayouts.navigation.Screen
 
 @Composable
 fun Navigation() {

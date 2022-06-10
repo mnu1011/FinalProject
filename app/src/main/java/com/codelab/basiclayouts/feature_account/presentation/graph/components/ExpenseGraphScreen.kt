@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
-import com.codelab.basiclayouts.Screen
+import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.feature_account.domain.model.AccountTypeTotalData
 import com.codelab.basiclayouts.feature_account.presentation.graph.GraphViewModel
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.HexToJetpackColor

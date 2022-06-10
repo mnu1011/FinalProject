@@ -15,7 +15,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
-import com.codelab.basiclayouts.Screen
 import com.codelab.basiclayouts.feature_account.domain.model.FilterOption
 import com.codelab.basiclayouts.feature_account.presentation.record_list.components.RecordCardColumn
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.FilterViewModel

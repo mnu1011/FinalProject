@@ -1,6 +1,4 @@
-package com.codelab.basiclayouts
-
-import androidx.annotation.StringRes
+package com.codelab.basiclayouts.navigation
 
 sealed class Screen(val route: String) {
     object HomePage : Screen("home_page")
