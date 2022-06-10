@@ -26,7 +26,21 @@ import com.codelab.basiclayouts.feature_account.presentation.track_expense.Recor
 import com.codelab.basiclayouts.feature_account.presentation.track_expense.component.RecordingPageScreen
 import com.codelab.basiclayouts.feature_cards.presentation.CardViewModel
 import com.codelab.basiclayouts.feature_cards.presentation.card.components.CardScreen
+import com.codelab.basiclayouts.feature_group.GroupViewModel
+import com.codelab.basiclayouts.feature_group.chatroom.ChatRoomScreen
+import com.codelab.basiclayouts.feature_group.chatroom.MessageViewModel
+import com.codelab.basiclayouts.feature_group.group_create.InvitePage
+import com.codelab.basiclayouts.feature_group.group_create.UserData
+import com.codelab.basiclayouts.feature_group.group_create.UserDataType
+import com.codelab.basiclayouts.feature_group.group_create.UserViewModel
+import com.codelab.basiclayouts.feature_group.group_main.GroupScreen
+import com.codelab.basiclayouts.feature_group.group_main.GroupSelectScreen
+import com.codelab.basiclayouts.feature_group.group_main.InsideGroupScreen
+import com.codelab.basiclayouts.feature_group.members.MemberScreen
+import com.codelab.basiclayouts.feature_group.members.ProfileScreen
+import com.codelab.basiclayouts.feature_group.tasks.TasksScreen
 import com.codelab.basiclayouts.navigation.Screen
+import com.example.friendly.ui.theme.SettingsScreen
 
 @Composable
 fun Navigation() {
@@ -37,6 +51,9 @@ fun Navigation() {
     val recordViewModel: RecordViewModel = viewModel()
     val filterViewModel: FilterViewModel = viewModel()
     val recordingViewModel: RecordingViewModel = viewModel()
+    val groupViewModel: GroupViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
+    val messagepViewModel: MessageViewModel = viewModel()
 
     val navController = rememberNavController()
     Scaffold(
@@ -51,51 +68,55 @@ fun Navigation() {
                 }
             )
         }
-    ){ innerPadding ->
-        NavHost(navController = navController, startDestination = Screen.HomePage.route, Modifier.padding(innerPadding)){
-            composable(route = Screen.HomePage.route){
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.HomePage.route,
+            Modifier.padding(innerPadding)
+        ) {
+            composable(route = Screen.HomePage.route) {
                 HomepageScreen(
                     onClickCollectionBook = { navController.navigate(Screen.CardCollectionScreen.route) },
                     homepageViewModel
                 )
             }
-            composable(route = Screen.CardCollectionScreen.route){
+            composable(route = Screen.CardCollectionScreen.route) {
                 CardCollectionScreen(
                     navController,
                     cardViewModel
                 )
             }
-            composable(route = Screen.ExpenseGraphScreen.route){
+            composable(route = Screen.ExpenseGraphScreen.route) {
                 ExpenseGraphScreen(
                     navController,
                     graphViewModel
                 )
             }
-            composable(route = Screen.IncomeGraphScreen.route){
+            composable(route = Screen.IncomeGraphScreen.route) {
                 IncomeGraphScreen(
                     navController,
                     graphViewModel
                 )
             }
-            composable(route = Screen.RecordScreen.route){
+            composable(route = Screen.RecordScreen.route) {
                 RecordScreen(
                     navController,
                     recordViewModel
                 )
             }
-            composable(route = Screen.SearchScreen.route){
+            composable(route = Screen.SearchScreen.route) {
                 SearchScreen(
                     navController,
                     filterViewModel
                 )
             }
-            composable(route = Screen.SortFilterScreen.route){
+            composable(route = Screen.SortFilterScreen.route) {
                 FilterScreen(
                     navController,
                     filterViewModel
                 )
             }
-            composable(route = Screen.TrackingScreen.route){
+            composable(route = Screen.TrackingScreen.route) {
                 RecordingPageScreen(
                     navController,
                     recordingViewModel
@@ -110,7 +131,7 @@ fun Navigation() {
                         //nullable = false
                     }
                 )
-            ){ entry ->
+            ) { entry ->
                 val petCard = entry.arguments?.getParcelable<PetCard>("petCard")
                 if (petCard != null) {
                     CardScreen(
@@ -119,6 +140,66 @@ fun Navigation() {
                         petCard
                     )
                 }
+            }
+            composable(route = Screen.GroupSelectScreen.route) {
+                GroupSelectScreen(
+                    navController,
+                    groupViewModel
+                )
+            }
+            composable(route = Screen.InsideGroupScreen.route) {
+                InsideGroupScreen(
+                    navController,
+                    groupViewModel
+                )
+            }
+            composable(route = Screen.MemberScreen.route) {
+                MemberScreen(
+                    navController,
+                    groupViewModel
+                )
+            }
+            composable(
+                route = Screen.ProfileScreen.route + "/{memberData}",
+                arguments = listOf(
+                    navArgument("memberData") {
+                        type = UserDataType()
+                        //defaultValue = ""
+                        //nullable = false
+                    }
+                )
+            ) { entry ->
+                val memberData = entry.arguments?.getParcelable<UserData>("memberData")
+                if (memberData != null) {
+                    ProfileScreen(
+                        navController,
+                        userViewModel,
+                        memberData
+                    )
+                }
+            }
+            composable(route = Screen.TasksScreen.route) {
+                TasksScreen(
+                    navController
+                )
+            }
+            composable(route = Screen.ChatRoomScreen.route) {
+                ChatRoomScreen(
+                    navController,
+                    messagepViewModel
+                )
+            }
+            composable(route = Screen.InviteScreen.route) {
+                InvitePage(
+                    navController,
+                    userViewModel
+                )
+            }
+            composable(route = Screen.SettingScreen.route) {
+                SettingsScreen(
+                    navController,
+                    userViewModel
+                )
             }
         }
     }

@@ -22,8 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.feature_group.GroupViewModel
 import com.codelab.basiclayouts.feature_group.group_create.UserViewModel
+import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.ui.theme.Gray200
 import com.codelab.basiclayouts.ui.theme.Orange200
 
@@ -100,6 +104,7 @@ fun ConfirmMemberGrid(
 
 @Composable
 fun Settings(
+    navController: NavController,
     userViewModel: UserViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -126,7 +131,7 @@ fun Settings(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable { }
+                        .clickable { navController.navigateUp() }
                         .size(35.dp)
                 )
                 Text(
@@ -137,7 +142,7 @@ fun Settings(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable { }
+                        .clickable { navController.navigate(Screen.GroupSelectScreen.route) }
                         .size(35.dp)
                 )
             }
@@ -198,15 +203,18 @@ fun Settings(
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview(){
-    SettingsScreen()
+    val navController = rememberNavController()
+    val userViewModel: UserViewModel = viewModel()
+    SettingsScreen(navController, userViewModel)
 }
 
 @Composable
 fun SettingsScreen(
-    userViewModel: UserViewModel = viewModel(),
+    navController: NavController,
+    userViewModel: UserViewModel,
     modifier: Modifier = Modifier
 ) {
-    Settings(userViewModel)
+    Settings(navController, userViewModel)
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = Modifier
@@ -217,7 +225,12 @@ fun SettingsScreen(
             color = Orange200,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier
-                .clickable { userViewModel.createGroup() }
+                .clickable (
+                    onClick = {
+                        userViewModel.createGroup()
+                        navController.navigate(Screen.InsideGroupScreen.route)
+                    }
+                )
                 .shadow(
                     elevation = 8.dp,
                     shape = MaterialTheme.shapes.medium

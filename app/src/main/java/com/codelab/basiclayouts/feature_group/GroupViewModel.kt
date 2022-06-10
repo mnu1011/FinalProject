@@ -1,5 +1,6 @@
 package com.codelab.basiclayouts.feature_group
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.feature_group.group_create.UserData
 import com.codelab.basiclayouts.feature_group.group_create.ownedMonsterList
+import kotlinx.android.parcel.Parcelize
 
 class GroupViewModel: ViewModel() {
     var hatchProgress: Float by mutableStateOf(0f)
@@ -70,10 +72,11 @@ private val groupNames = listOf(
     "GroupA", "GroupB", "GroupC", "GroupD"
 )
 
+@Parcelize
 data class MonsterData(
     @DrawableRes val picture: Int,
     val name: String
-)
+): Parcelable
 
 val monstersInParkList = listOf<MonsterData>(
     MonsterData(R.drawable.monster_1, "monster_1"),

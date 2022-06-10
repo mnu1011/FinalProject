@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.feature_group.TaskData
 import com.codelab.basiclayouts.feature_group.component.TopBar
@@ -88,7 +90,10 @@ fun TaskList(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TasksScreen(modifier: Modifier = Modifier) {
+fun TasksScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     Box {
         Image(
             painter = painterResource(R.drawable.light_group_background),
@@ -102,7 +107,7 @@ fun TasksScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
             TopBar(
-                onClose = {},
+                onClose = { navController.navigateUp() },
                 title = "Tasks"
             )
             TaskList()
@@ -113,7 +118,8 @@ fun TasksScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun TasksScreenPreview() {
+    val navController = rememberNavController()
     MySootheTheme() {
-        TasksScreen()
+        TasksScreen(navController)
     }
 }

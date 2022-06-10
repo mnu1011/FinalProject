@@ -21,7 +21,11 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.feature_group.GroupViewModel
+import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.ui.theme.Gray200
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 import com.codelab.basiclayouts.ui.theme.Orange200
@@ -145,7 +149,8 @@ fun InviteSearchBar(
 
 @Composable
 fun InvitePage(
-    userViewModel: UserViewModel = viewModel(),
+    navController: NavController,
+    userViewModel: UserViewModel,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
@@ -171,20 +176,15 @@ fun InvitePage(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable { }
+                        .clickable { navController.navigateUp() }
                         .size(35.dp)
                 )
+                Spacer(modifier = Modifier.padding(horizontal = 55.dp))
                 Text(
                     text = "Invite",
-                    style = MaterialTheme.typography.h4
+                    style = MaterialTheme.typography.h4,
                 )
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable { }
-                        .size(35.dp)
-                )
+                Spacer(modifier = Modifier.fillMaxWidth())
             }
             Divider(
                 color = Color.Gray,
@@ -209,7 +209,7 @@ fun InvitePage(
                 color = Orange200,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .clickable {} //Navigate到SettingScreen
+                    .clickable { navController.navigate(Screen.SettingScreen.route) } //Navigate到SettingScreen
                     .shadow(
                         elevation = 8.dp,
                         shape = MaterialTheme.shapes.medium
@@ -234,7 +234,9 @@ fun InvitePage(
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun InvitePagePreview() {
+    val navController = rememberNavController()
+    val userViewModel: UserViewModel = viewModel()
     MySootheTheme {
-        InvitePage()
+        InvitePage(navController, userViewModel)
     }
 }

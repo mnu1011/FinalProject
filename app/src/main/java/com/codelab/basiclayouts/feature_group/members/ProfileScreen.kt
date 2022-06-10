@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.feature_group.component.TopBar
 import com.codelab.basiclayouts.feature_group.group_create.UserData
 import com.codelab.basiclayouts.feature_group.group_create.UserViewModel
@@ -182,7 +184,8 @@ fun ProfileCard(
 
 @Composable
 fun ProfileScreen(
-    userViewModel: UserViewModel = viewModel(),
+    navController: NavController,
+    userViewModel: UserViewModel,
     memberData: UserData,
     modifier: Modifier = Modifier
 ) {
@@ -198,7 +201,7 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(32.dp),
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
-            TopBar(onClose = {},"Profile")
+            TopBar(onClose = { navController.navigateUp() },"Profile")
             ProfileCard(userViewModel, memberData)
         }
     }
@@ -207,7 +210,9 @@ fun ProfileScreen(
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun ProfileScreenPreview() {
+    val navController = rememberNavController()
+    val userViewModel: UserViewModel = viewModel()
     MySootheTheme() {
-        ProfileScreen(memberData = memberDataList[0])
+        ProfileScreen(navController, userViewModel, memberData = memberDataList[0])
     }
 }

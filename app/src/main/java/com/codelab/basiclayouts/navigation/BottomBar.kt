@@ -122,7 +122,7 @@ fun BottomMenu(navController: NavController,
                     text = R.string.Group,
                     drawable = R.drawable.group_menu_icon,
                     onItemClick = {
-
+                        onButtonClicked(Screen.GroupSelectScreen.route)
                     }
                 )
                 BottomMenuItem(

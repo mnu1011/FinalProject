@@ -16,7 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.feature_group.GroupViewModel
 import com.codelab.basiclayouts.feature_group.component.TopBar
 import com.codelab.basiclayouts.ui.theme.Brown100
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
@@ -112,7 +115,8 @@ fun MessageList(
 
 @Composable
 fun ChatRoomScreen(
-    messageViewModel: MessageViewModel = viewModel(),
+    navController: NavController,
+    messageViewModel: MessageViewModel,
     modifier: Modifier = Modifier
 ) {
     var inputValue by remember { mutableStateOf("") }
@@ -133,7 +137,7 @@ fun ChatRoomScreen(
             verticalArrangement = Arrangement.spacedBy(32.dp),
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
-            TopBar(onClose = {},"Group A")
+            TopBar(onClose = { navController.navigateUp() },"Group A")
             MessageList(messageViewModel.groupMessages)
         }
         Row(modifier = Modifier.align(Alignment.BottomCenter)){
@@ -161,7 +165,9 @@ fun ChatRoomScreen(
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun ChatRoomScreenPreview() {
+    val navController = rememberNavController()
+    val messagepViewModel: MessageViewModel = viewModel()
     MySootheTheme(){
-        ChatRoomScreen()
+        ChatRoomScreen(navController, messagepViewModel)
     }
 }

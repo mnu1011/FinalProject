@@ -19,9 +19,12 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.feature_group.GroupViewModel
 import com.codelab.basiclayouts.feature_group.MonsterData
+import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.ui.theme.*
 
 private val topButtonHeight = 45.dp
@@ -121,6 +124,7 @@ fun GroupName(
 
 @Composable
 fun GroupTopBar(
+    navController: NavController,
     groupViewModel: GroupViewModel,
     @StringRes name: Int,
     modifier: Modifier = Modifier
@@ -138,8 +142,8 @@ fun GroupTopBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             GroupName(name)
-            MembersButton(onClick = { })
-            TasksButton(onClick = { groupViewModel.updateTasks() })
+            MembersButton(onClick = { navController.navigate(Screen.MemberScreen.route) })
+            TasksButton(onClick = { groupViewModel.updateTasks(); navController.navigate(Screen.TasksScreen.route) })
         }
     }
 }
@@ -326,7 +330,8 @@ fun NewMonsterCard(
 
 @Composable
 fun InsideGroupScreen(
-    groupViewModel: GroupViewModel = viewModel(),
+    navController: NavController,
+    groupViewModel: GroupViewModel,
     modifier: Modifier = Modifier
 ) {
     var showCollectCard by remember {
@@ -341,6 +346,7 @@ fun InsideGroupScreen(
             modifier = Modifier.fillMaxSize()
         )
         GroupTopBar(
+            navController,
             groupViewModel = groupViewModel,
             name = R.string.GroupA_name,
             modifier = Modifier.align(Alignment.TopCenter)
@@ -364,7 +370,7 @@ fun InsideGroupScreen(
         ) {
             Box(modifier = Modifier.offset(x = (-16).dp, y = -8.dp)) {
                 ChatroomButton(
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.ChatRoomScreen.route) }
                 )
             }
             HatchProgressBar(
@@ -395,8 +401,13 @@ fun InsideGroupScreen(
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun InsideGroupPreview() {
+    val navController = rememberNavController()
+    val groupViewModel: GroupViewModel = viewModel()
     MySootheTheme() {
-        InsideGroupScreen()
+        InsideGroupScreen(
+            navController,
+            groupViewModel
+        )
     }
 }
 

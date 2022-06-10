@@ -1,13 +1,19 @@
 package com.codelab.basiclayouts.feature_group.group_create
 
+import android.os.Bundle
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavType
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.feature_account.domain.model.PetCard
 import com.codelab.basiclayouts.feature_group.MonsterData
+import com.google.gson.Gson
+import kotlinx.android.parcel.Parcelize
 
 class UserViewModel: ViewModel() {
     var selectedFriends: MutableList<UserData> = mutableListOf()
@@ -38,12 +44,25 @@ private fun getFriendList(): List<UserData>{
     return friendDataList
 }
 
+@Parcelize
 data class UserData(
     @DrawableRes val profile: Int,
     val name: String,
     val completedTasksNum: Int,
     val ownedMonsters: List<MonsterData>
-)
+): Parcelable
+
+class UserDataType : NavType<UserData>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): UserData? {
+        return bundle.getParcelable(key)
+    }
+    override fun parseValue(value: String): UserData {
+        return Gson().fromJson(value, UserData::class.java)
+    }
+    override fun put(bundle: Bundle, key: String, value: UserData) {
+        bundle.putParcelable(key, value)
+    }
+}
 
 val ownedMonsterList = listOf(
     MonsterData(R.drawable.monster_1, "monster_1"),

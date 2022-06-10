@@ -19,8 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.feature_group.GroupViewModel
+import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.ui.theme.Gray200
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 import com.codelab.basiclayouts.ui.theme.Orange200
@@ -28,7 +31,9 @@ import com.codelab.basiclayouts.ui.theme.Orange200
 @Preview(showBackground = true)
 @Composable
 fun  GroupScreenPreview(){
-    GroupScreen()
+    val navController = rememberNavController()
+    val groupViewModel: GroupViewModel = viewModel()
+    GroupScreen(navController, groupViewModel)
 }
 
 @Composable
@@ -41,7 +46,7 @@ fun GroupBottom(
         color = Gray200,
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
-            .clickable { onItemClick() }
+            .clickable(onClick = onItemClick)
             .shadow(
                 elevation = 8.dp,
                 shape = MaterialTheme.shapes.medium
@@ -63,7 +68,8 @@ fun GroupBottom(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GroupsGrid(
-    groupViewModel: GroupViewModel = viewModel(),
+    navController: NavController,
+    groupViewModel: GroupViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -81,14 +87,14 @@ fun GroupsGrid(
             items(groupViewModel.groupList) { item ->
                 GroupBottom(
                     groupName = item,
-                    onItemClick = { groupViewModel.updateHatchProgress() } //Navigate到Group
+                    onItemClick = { groupViewModel.updateHatchProgress(); navController.navigate(Screen.InsideGroupScreen.route) } //Navigate到Group
                 )
             }
         }
         Card(
             backgroundColor = Orange200,
             elevation = 8.dp,
-            modifier = Modifier.clickable { } //Navigate to InviteScreen
+            modifier = Modifier.clickable { navController.navigate(Screen.InviteScreen.route) } //Navigate to InviteScreen
             ) {
             Text(
                 text = "Create!",
@@ -108,7 +114,8 @@ fun GroupsGrid(
 
 @Composable
 fun GroupScreen(
-    groupViewModel: GroupViewModel = viewModel(),
+    navController: NavController,
+    groupViewModel: GroupViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -126,7 +133,7 @@ fun GroupScreen(
             thickness = 2.dp,
             modifier = Modifier.padding(16.dp)
         )
-        GroupsGrid(groupViewModel)
+        GroupsGrid(navController, groupViewModel)
     }
 }
 //@Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
@@ -139,7 +146,8 @@ fun GroupScreen(
 
 @Composable
 fun GroupSelectScreen(
-    groupViewModel: GroupViewModel = viewModel(),
+    navController: NavController,
+    groupViewModel: GroupViewModel,
     modifier: Modifier = Modifier
 ) {
     MySootheTheme() {
@@ -153,7 +161,7 @@ fun GroupSelectScreen(
                 contentScale = ContentScale.Crop,
                 modifier = modifier.fillMaxWidth()
             )
-            GroupScreen(groupViewModel)
+            GroupScreen(navController, groupViewModel)
         }
     }
 }
