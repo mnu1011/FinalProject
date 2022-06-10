@@ -89,7 +89,7 @@ fun SearchTopAppBar(navController: NavController){
 
             Spacer(modifier = Modifier.width(110.dp))
 
-            IconButton(onClick = { navController.navigateUp() }) {
+            IconButton(onClick = { navController.navigate(Screen.RecordScreen.route) }) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
                     contentDescription = null

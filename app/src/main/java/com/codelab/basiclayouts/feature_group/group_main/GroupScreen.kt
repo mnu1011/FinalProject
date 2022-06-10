@@ -358,7 +358,7 @@ fun InsideGroupScreen(
         ) {
             Box(modifier = Modifier.offset(x = 100.dp, y = -60.dp)){
                 CollectBook(
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.CardCollectionScreen.route) }
                 )
             }
             MonstersInParkRow(groupViewModel)

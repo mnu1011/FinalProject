@@ -375,7 +375,7 @@ fun ConfirmButtonRow(
                     )
                     .clickable(
                         enabled = true,
-                        onClick = { navController.navigate(Screen.RecordScreen.route) }
+                        onClick = { navController.navigate(Screen.FilterResultScreen.route) }
                     ),
                 textAlign = TextAlign.Center
             )

@@ -20,6 +20,7 @@ import com.codelab.basiclayouts.feature_account.presentation.homepage.component.
 import com.codelab.basiclayouts.feature_account.presentation.record_list.RecordViewModel
 import com.codelab.basiclayouts.feature_account.presentation.record_list.components.RecordScreen
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.FilterViewModel
+import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.FilterResultScreen
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.FilterScreen
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.SearchScreen
 import com.codelab.basiclayouts.feature_account.presentation.track_expense.RecordingViewModel
@@ -112,6 +113,12 @@ fun Navigation() {
             }
             composable(route = Screen.SortFilterScreen.route) {
                 FilterScreen(
+                    navController,
+                    filterViewModel
+                )
+            }
+            composable(route = Screen.FilterResultScreen.route) {
+                FilterResultScreen(
                     navController,
                     filterViewModel
                 )
