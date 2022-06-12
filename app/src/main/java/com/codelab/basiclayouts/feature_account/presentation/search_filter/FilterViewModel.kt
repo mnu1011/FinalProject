@@ -5,11 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_account.domain.model.AccountRecord
-import com.codelab.basiclayouts.feature_account.domain.model.AccountType
 import com.codelab.basiclayouts.feature_account.domain.model.FilterOption
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class FilterViewModel: ViewModel() {
+@HiltViewModel
+class FilterViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel() {
     private val _recordData = getRecordData().toMutableStateList()
 
     private var _searchKey by mutableStateOf("")
@@ -64,35 +69,35 @@ class FilterViewModel: ViewModel() {
 private fun getRecordData(): List<AccountRecord>{
     return listOf(
         AccountRecord(
-            AccountType.FOOD,
+            // AccountType.FOOD,
             "Bubble Tea",
             50,
             "2022/6/4/10:52",
             "飲食"
         ),
         AccountRecord(
-            AccountType.LOTTERY,
+            // AccountType.LOTTERY,
             "Lottery",
             1000,
             "2022/6/4/11:33",
             "獎金"
         ),
         AccountRecord(
-            AccountType.FOOD,
+            // AccountType.FOOD,
             "Pizza",
             200,
             "2022/6/4/20:19",
             "飲食"
         ),
         AccountRecord(
-            AccountType.CLOTHS,
+            // AccountType.CLOTHS,
             "T-shirt",
             500,
             "2022/6/4/21:29",
             "服裝"
         ),
         AccountRecord(
-            AccountType.EDUCATION,
+            // AccountType.EDUCATION,
             "Book_A",
             3000,
             "2022/6/4/23:12",

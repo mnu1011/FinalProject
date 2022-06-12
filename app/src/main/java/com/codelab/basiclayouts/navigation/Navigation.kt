@@ -1,15 +1,19 @@
-package com.codelab.basiclayouts
+package com.codelab.basiclayouts.navigation
 
+import android.os.Build
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.codelab.basiclayouts.BottomMenu
+import com.codelab.basiclayouts.CardCollectionScreen
 import com.codelab.basiclayouts.feature_account.domain.model.PetCard
 import com.codelab.basiclayouts.feature_account.domain.model.PetCardType
 import com.codelab.basiclayouts.feature_account.presentation.graph.GraphViewModel
@@ -17,6 +21,7 @@ import com.codelab.basiclayouts.feature_account.presentation.graph.components.Ex
 import com.codelab.basiclayouts.feature_account.presentation.graph.components.IncomeGraphScreen
 import com.codelab.basiclayouts.feature_account.presentation.homepage.HomepageViewModel
 import com.codelab.basiclayouts.feature_account.presentation.homepage.component.HomepageScreen
+import com.codelab.basiclayouts.feature_account.presentation.record_list.Date
 import com.codelab.basiclayouts.feature_account.presentation.record_list.RecordViewModel
 import com.codelab.basiclayouts.feature_account.presentation.record_list.components.RecordScreen
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.FilterViewModel
@@ -34,14 +39,14 @@ import com.codelab.basiclayouts.feature_group.group_create.InvitePage
 import com.codelab.basiclayouts.feature_group.group_create.UserData
 import com.codelab.basiclayouts.feature_group.group_create.UserDataType
 import com.codelab.basiclayouts.feature_group.group_create.UserViewModel
-import com.codelab.basiclayouts.feature_group.group_main.GroupScreen
 import com.codelab.basiclayouts.feature_group.group_main.GroupSelectScreen
 import com.codelab.basiclayouts.feature_group.group_main.InsideGroupScreen
 import com.codelab.basiclayouts.feature_group.members.MemberScreen
 import com.codelab.basiclayouts.feature_group.members.ProfileScreen
 import com.codelab.basiclayouts.feature_group.tasks.TasksScreen
-import com.codelab.basiclayouts.navigation.Screen
 import com.example.friendly.ui.theme.SettingsScreen
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun Navigation() {
@@ -66,7 +71,7 @@ fun Navigation() {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
     ) { innerPadding ->
@@ -99,7 +104,8 @@ fun Navigation() {
                     graphViewModel
                 )
             }
-            composable(route = Screen.RecordScreen.route) {
+            composable( route = Screen.RecordScreen.route ) { entry ->
+                recordViewModel.goIntoRecordPage()
                 RecordScreen(
                     navController,
                     recordViewModel
@@ -211,6 +217,5 @@ fun Navigation() {
         }
     }
 }
-
 
 

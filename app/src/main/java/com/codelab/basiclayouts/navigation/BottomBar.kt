@@ -15,9 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
+import com.codelab.basiclayouts.feature_account.presentation.record_list.RecordViewModel
+import com.codelab.basiclayouts.feature_account.presentation.track_expense.RecordingViewModel
 import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 
@@ -47,6 +50,7 @@ fun BottomMenuItem(
         )
     }
 }
+
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun BottomMenuItemPreview() {
@@ -62,7 +66,8 @@ fun BottomMenuItemPreview() {
 @Composable
 fun BottomMenu(navController: NavController,
                onButtonClicked: (String) -> Unit,
-               modifier: Modifier = Modifier) {
+               modifier: Modifier = Modifier
+) {
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = modifier
@@ -96,7 +101,9 @@ fun BottomMenu(navController: NavController,
                     text = R.string.Record,
                     drawable = R.drawable.record_menu_icon,
                     onItemClick = {
-                        onButtonClicked(Screen.RecordScreen.route)
+                        onButtonClicked(
+                            Screen.RecordScreen.route
+                        )
                     }
                 )
             }
@@ -140,6 +147,7 @@ fun BottomMenu(navController: NavController,
 @Composable
 fun BottomMenuPreview() {
     val navController = rememberNavController()
+    val recordViewModel: RecordViewModel = viewModel()
     MySootheTheme {
         BottomMenu(navController,
             onButtonClicked = { screen ->
@@ -147,6 +155,7 @@ fun BottomMenuPreview() {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
-            } )
+            },
+        )
     }
 }

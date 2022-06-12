@@ -142,9 +142,16 @@ fun ListBody(
                                 day.toString()
                             )
                              date = recordViewModel.currentDate.year.plus("/")
-                                 .plus(recordViewModel.currentDate.month)
+                                 .plus(
+                                     if(recordViewModel.currentDate.month.length == 1) "0" + recordViewModel.currentDate.month
+                                     else recordViewModel.currentDate.month
+                                 )
                                  .plus("/")
-                                 .plus(recordViewModel.currentDate.day)
+                                 .plus(
+                                     if(recordViewModel.currentDate.day.length == 1) "0" + recordViewModel.currentDate.day
+                                     else recordViewModel.currentDate.day
+                                 )
+                         recordViewModel.getRecordDataFromDatabase(date)
                          }
                 },
                 modifier = modifier

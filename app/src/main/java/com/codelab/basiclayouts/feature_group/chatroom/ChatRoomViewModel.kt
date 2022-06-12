@@ -4,8 +4,14 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MessageViewModel: ViewModel() {
+@HiltViewModel
+class MessageViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel() {
     private val _groupMessages = getMessageHistoryData().toMutableStateList()
     val groupMessages: List<MessageData>
         get() = _groupMessages

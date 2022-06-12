@@ -5,10 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.HexToJetpackColor
 import com.codelab.basiclayouts.feature_account.domain.model.AccountTypeTotalData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class GraphViewModel: ViewModel(){
+@HiltViewModel
+class GraphViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel(){
     private val _incomeTypePercentageData = getIncomeData().toMutableStateList()
     val incomeTypePercentageData: List<AccountTypeTotalData>
         get() = _incomeTypePercentageData

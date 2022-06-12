@@ -75,7 +75,7 @@ fun RecordingPage(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(10.dp))
-        Function()
+        Function(recordingViewModel)
         Column {
             Surface(
                 border = BorderStroke(2.dp, Color.Black),
@@ -87,11 +87,24 @@ fun RecordingPage(
                     modifier = Modifier.width(350.dp)
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))
-                    Date()
+                    Date(
+                        recordingViewModel.currentDateStandard,
+                        onDateChange = { date ->
+                            recordingViewModel.dateChange(date)
+                        }
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
-                    Item()
+                    Item(
+                        onItemChange = { item ->
+                        recordingViewModel.itemChange(item)
+                        }
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
-                    Price()
+                    Price(
+                        onPriceChange = { price ->
+                            recordingViewModel.priceChange(price)
+                        }
+                    )
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
                         text = "Category",
@@ -102,14 +115,19 @@ fun RecordingPage(
                             .padding(start = 25.dp)
                     )
                     Category(
-                        recordingViewModel.typeData,
+                        when(recordingViewModel.category){
+                            "Expense" -> recordingViewModel.expenseType
+                            else -> recordingViewModel.incomeType },
                         recordingViewModel.typeChoose,
                         onSelectionChange = { type ->
                             recordingViewModel.typeChange(type)
                         })
                     Spacer(modifier = Modifier.height(60.dp))
                     Button(
-                        onClick = { navController.navigate(Screen.RecordScreen.route) },
+                        onClick = {
+                            recordingViewModel.sendToDatabase()
+                            navController.navigate(Screen.RecordScreen.route)
+                                  },
                         modifier = Modifier.width(200.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Magenta,
@@ -127,17 +145,13 @@ fun RecordingPage(
 }
 
 @Composable
-fun Function() {
+fun Function(
+    recordingViewModel: RecordingViewModel
+) {
     val options = listOf(
         "Expense",
         "Income",
     )
-    var selectedOption by remember {
-        mutableStateOf("Expense")
-    }
-    val onSelectionChange = { text: String ->
-        selectedOption = text
-    }
 
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -156,7 +170,7 @@ fun Function() {
                         style = typography.body1.merge(),
                         color = Color.White,
                         fontWeight = FontWeight.W600,
-                        fontSize = when (text == selectedOption) {
+                        fontSize = when (text == recordingViewModel.category) {
                             true -> 22.sp
                             else -> 13.sp
                         },
@@ -167,10 +181,10 @@ fun Function() {
                                 ),
                             )
                             .clickable {
-                                onSelectionChange(text)
+                                recordingViewModel.changeCategory(text)
                             }
                             .background(
-                                if (text == selectedOption) {
+                                if (text == recordingViewModel.category) {
                                     Magenta
                                 } else {
                                     Color.LightGray
@@ -188,11 +202,17 @@ fun Function() {
 }
 
 @Composable
-fun Date(){
-    var text by remember { mutableStateOf("") }
+fun Date(currentDate: String, onDateChange: (String) -> Unit){
+
+    //var date by remember { mutableStateOf(currentDate) }
+    var date by remember { mutableStateOf("") }
+
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = date,
+        onValueChange = {
+            date = it
+            onDateChange(it)
+                        },
         label = { Text("Date") },
         leadingIcon = {
             Icon(
@@ -202,7 +222,7 @@ fun Date(){
         },
         placeholder = {
             Text(
-                text = "Ex. 2022 / 6 / 6",
+                text = "Ex. 2022/06/14",
                 color = Color.Gray,
                 fontWeight = FontWeight.W600
             )
@@ -216,11 +236,14 @@ fun Date(){
 }
 
 @Composable
-fun Item(){
+fun Item(onItemChange: (String) -> Unit){
     var text by remember { mutableStateOf("") }
     OutlinedTextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = {
+            text = it
+            onItemChange(text)
+                        },
         label = { Text("Item") },
         leadingIcon = {
             Icon(
@@ -244,11 +267,14 @@ fun Item(){
 }
 
 @Composable
-fun Price(){
+fun Price(onPriceChange: (Int) -> Unit){
     var text by remember { mutableStateOf("") }
     OutlinedTextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = {
+            text = it
+            onPriceChange(it.toInt())
+                        },
         label = { Text("Price") },
         leadingIcon = {
             Icon(
@@ -258,7 +284,7 @@ fun Price(){
         },
         placeholder = {
             Text(
-                text = "Ex. 20$",
+                text = "Ex. 20",
                 color = Color.Gray,
                 fontWeight = FontWeight.W600
             )
@@ -282,7 +308,9 @@ fun Category(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
         contentPadding = PaddingValues(vertical = 15.dp, horizontal = 25.dp)
     ) {
-        items(typelist) { item ->
+        items(
+            typelist
+        ) { item ->
             Type(item, selectedtype, os = { onSelectionChange(item) })
         }
     }
@@ -353,16 +381,17 @@ fun MyTopAppBar(navController: NavController){
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DatePreview() {
-    Date()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DatePreview() {
+//    Date()
+//}
 
 @Preview(showBackground = true)
 @Composable
 fun FunctionPreview() {
-    Function()
+    val recordingViewModel: RecordingViewModel = viewModel()
+    Function(recordingViewModel)
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_3_XL)

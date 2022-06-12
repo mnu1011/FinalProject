@@ -1,53 +1,32 @@
 package com.codelab.basiclayouts.feature_account.presentation.homepage
 
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_account.domain.model.FriendInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomepageViewModel: ViewModel() {
+@HiltViewModel
+class HomepageViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel() {
     private val _friendList = getFriendData().toMutableStateList()
 
     val friendList: List<FriendInfo>
         get() = _friendList
+
+    // 下面這是展示用 到時候要移到初始頁面initialize卡片
+    fun addCards(){
+        viewModelScope.launch {
+            accountingUseCases.cardInit()
+        }
+    }
 }
 
 private fun getFriendData(): List<FriendInfo>{
-    return listOf(
-        FriendInfo(
-            R.string.Wu,
-            R.drawable.wu,
-            91,
-        ),
-        FriendInfo(
-            R.string.Sophia,
-            R.drawable.sophia,
-            72,
-        ),
-        FriendInfo(
-            R.string.Lucy,
-            R.drawable.lucy,
-            65,
-        ),
-        FriendInfo(
-            R.string.Alice,
-            R.drawable.alice,
-            57,
-        ),
-        FriendInfo(
-            R.string.Christen,
-            R.drawable.christen,
-            51,
-        ),
-        FriendInfo(
-            R.string.Sam,
-            R.drawable.sam,
-            48,
-        ),
-        FriendInfo(
-            R.string.Jennifer,
-            R.drawable.jennifer,
-            40,
-        ),
-    )
+    return friendsList
 }

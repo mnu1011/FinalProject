@@ -19,19 +19,10 @@ package com.codelab.basiclayouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.codelab.basiclayouts.feature_account.presentation.graph.components.ExpenseGraphScreen
-import com.codelab.basiclayouts.feature_account.presentation.graph.components.IncomeGraphScreen
-import com.codelab.basiclayouts.feature_account.presentation.homepage.HomepageViewModel
-import com.codelab.basiclayouts.feature_account.presentation.homepage.component.HomepageScreen
-import com.codelab.basiclayouts.feature_account.presentation.record_list.components.RecordScreen
-import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.FilterResultScreen
-import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.FilterScreen
-import com.codelab.basiclayouts.feature_account.presentation.search_filter.components.SearchScreen
-import com.codelab.basiclayouts.feature_account.presentation.track_expense.component.RecordingPageScreen
-import com.codelab.basiclayouts.feature_cards.presentation.card.components.CardScreen
-import com.codelab.basiclayouts.feature_cards.presentation.cardList
+import com.codelab.basiclayouts.navigation.Navigation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

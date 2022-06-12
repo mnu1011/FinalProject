@@ -8,11 +8,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_group.group_create.UserData
 import com.codelab.basiclayouts.feature_group.group_create.ownedMonsterList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.android.parcel.Parcelize
+import javax.inject.Inject
 
-class GroupViewModel: ViewModel() {
+@HiltViewModel
+class GroupViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel() {
     var hatchProgress: Float by mutableStateOf(0f)
     var readyToHatch: Boolean by mutableStateOf(false)
 

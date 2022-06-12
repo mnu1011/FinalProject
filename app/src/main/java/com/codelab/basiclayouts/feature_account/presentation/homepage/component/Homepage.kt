@@ -36,7 +36,7 @@ import com.codelab.basiclayouts.feature_account.presentation.homepage.HomepageVi
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 
 @Composable
-fun CollectionBook(onClickCollectionBook: () -> Unit = {}){
+fun CollectionBook(onClickCollectionBook: () -> Unit = {}, homepageViewModel: HomepageViewModel){
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(30.dp))
         Image(
@@ -48,7 +48,10 @@ fun CollectionBook(onClickCollectionBook: () -> Unit = {}){
                 .clickable(
                     enabled = true,
                     onClickLabel = "Book",
-                    onClick = { onClickCollectionBook() }
+                    onClick = {
+                        onClickCollectionBook()
+                        homepageViewModel.addCards()
+                    }
                 )
         )
         Text(text = "Book")
@@ -81,12 +84,12 @@ fun SearchBar()
 
 @Composable
 fun Basic(
-    @StringRes name: Int,
+    name: String,
     value: Int
 ) {
     Column(modifier = Modifier.width(170.dp)) {
         Text(
-            text = stringResource(name),
+            text = name,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp
         )
@@ -115,7 +118,7 @@ fun Basic(
 
 @Composable
 fun Friend(
-    @StringRes name: Int,
+    name: String,
     @DrawableRes avatar: Int,
     intimacy: Int,
 ){
@@ -186,7 +189,7 @@ fun HomepageScreen(
                     .padding(end = 20.dp)
                     .fillMaxWidth()
             ){
-                CollectionBook(onClickCollectionBook)
+                CollectionBook(onClickCollectionBook, homepageViewModel)
             }
             Column {
                 Image(
@@ -247,7 +250,7 @@ fun HomepageScreen(
 @Preview(showBackground = true)
 @Composable
 fun FriendPreview() {
-    Friend(R.string.Wu, R.drawable.wu, 92)
+    Friend("Wu Shan Hung", R.drawable.wu, 92)
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_3_XL)

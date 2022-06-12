@@ -3,13 +3,21 @@ package com.codelab.basiclayouts.feature_account.presentation.record_list
 import android.os.Build
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_account.domain.model.AccountRecord
-import com.codelab.basiclayouts.feature_account.domain.model.AccountType
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class RecordViewModel: ViewModel() {
-    private val _recordData = getRecordData().toMutableStateList()
+@HiltViewModel
+class RecordViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel() {
+    //private var _recordData = getRecordData().toMutableStateList()
+    private var _recordData by mutableStateOf(listOf<AccountRecord>())
 
     private var _currentDate by mutableStateOf(getCurrentDate())
 
@@ -24,6 +32,29 @@ class RecordViewModel: ViewModel() {
         _currentDate.year = year
         _currentDate.month = month
         _currentDate.day = day
+    }
+
+    fun getRecordDataFromDatabase(date: String){
+        viewModelScope.launch {
+            _recordData = accountingUseCases.getRecordByDate(date).toMutableStateList()
+        }
+    }
+
+    fun goIntoRecordPage(){
+        val date = currentDate.year.plus("/")
+            .plus(currentDate.month)
+            .plus("/")
+            .plus(currentDate.day)
+        _currentDate = getCurrentDate()
+        getRecordDataFromDatabase(date)
+    }
+
+    init {
+        val date = currentDate.year.plus("/")
+            .plus(currentDate.month)
+            .plus("/")
+            .plus(currentDate.day)
+        getRecordDataFromDatabase(date)
     }
 }
 
@@ -40,46 +71,6 @@ private fun getCurrentDate(): Date {
         formatted.substring(0, 4),
         formatted.substring(5, 7),
         formatted.substring(8, 10)
-    )
-}
-
-private fun getRecordData(): List<AccountRecord>{
-    return listOf(
-        AccountRecord(
-            AccountType.FOOD,
-            "Bubble Tea",
-            50,
-            "2022/6/4/10:52",
-            "飲食"
-        ),
-        AccountRecord(
-            AccountType.LOTTERY,
-            "Lottery",
-            1000,
-            "2022/6/4/11:33",
-            "獎金"
-        ),
-        AccountRecord(
-            AccountType.FOOD,
-            "Pizza",
-            200,
-            "2022/6/4/20:19",
-            "飲食"
-        ),
-        AccountRecord(
-            AccountType.CLOTHS,
-            "T-shirt",
-            500,
-            "2022/6/4/21:29",
-            "服裝"
-        ),
-        AccountRecord(
-            AccountType.EDUCATION,
-            "Book_A",
-            3000,
-            "2022/6/4/23:12",
-            "教育"
-        ),
     )
 }
 

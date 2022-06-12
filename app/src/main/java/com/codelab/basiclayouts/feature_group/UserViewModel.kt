@@ -10,12 +10,18 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavType
 import com.codelab.basiclayouts.R
+import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_account.domain.model.PetCard
 import com.codelab.basiclayouts.feature_group.MonsterData
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.android.parcel.Parcelize
+import javax.inject.Inject
 
-class UserViewModel: ViewModel() {
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val accountingUseCases: AccountingUseCases
+) : ViewModel() {
     var selectedFriends: MutableList<UserData> = mutableListOf()
     var groupName: String by mutableStateOf("")
     var setMaximum: String by mutableStateOf("")
