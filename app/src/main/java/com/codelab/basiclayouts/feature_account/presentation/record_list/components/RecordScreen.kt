@@ -31,6 +31,7 @@ import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.feature_account.presentation.record_list.RecordViewModel
 import com.codelab.basiclayouts.feature_account.domain.model.AccountRecord
+import com.codelab.basiclayouts.feature_account.presentation.search_filter.FilterViewModel
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 
 
@@ -71,7 +72,9 @@ fun RecordScreenPreview() {
 
 
 @Composable
-fun MyTopAppBar(navController: NavController){
+fun MyTopAppBar(
+    navController: NavController
+){
     val color = HexToJetpackColor.getColor("FF8855")
 
     Row(
@@ -123,9 +126,9 @@ fun ListBody(
     var date by remember {
         mutableStateOf(
             recordViewModel.currentDate.year.plus("/")
-            .plus(recordViewModel.currentDate.month)
-            .plus("/")
-            .plus(recordViewModel.currentDate.day)
+                .plus(recordViewModel.currentDate.month)
+                .plus("/")
+                .plus(recordViewModel.currentDate.day)
         )
     }
 
@@ -135,24 +138,24 @@ fun ListBody(
                 factory = { CalendarView(ContextThemeWrapper(it, R.style.CustomCalendar)) },
                 //factory = { CalendarView(it) },
                 update = {
-                         it.setOnDateChangeListener{ calendarView, year, month, day ->
-                            recordViewModel.updateCurrentDate(
-                                year.toString(),
-                                (month+1).toString(),
-                                day.toString()
+                    it.setOnDateChangeListener{ calendarView, year, month, day ->
+                        recordViewModel.updateCurrentDate(
+                            year.toString(),
+                            (month+1).toString(),
+                            day.toString()
+                        )
+                        date = recordViewModel.currentDate.year.plus("/")
+                            .plus(
+                                if(recordViewModel.currentDate.month.length == 1) "0" + recordViewModel.currentDate.month
+                                else recordViewModel.currentDate.month
                             )
-                             date = recordViewModel.currentDate.year.plus("/")
-                                 .plus(
-                                     if(recordViewModel.currentDate.month.length == 1) "0" + recordViewModel.currentDate.month
-                                     else recordViewModel.currentDate.month
-                                 )
-                                 .plus("/")
-                                 .plus(
-                                     if(recordViewModel.currentDate.day.length == 1) "0" + recordViewModel.currentDate.day
-                                     else recordViewModel.currentDate.day
-                                 )
-                         recordViewModel.getRecordDataFromDatabase(date)
-                         }
+                            .plus("/")
+                            .plus(
+                                if(recordViewModel.currentDate.day.length == 1) "0" + recordViewModel.currentDate.day
+                                else recordViewModel.currentDate.day
+                            )
+                        recordViewModel.getRecordDataFromDatabase(date)
+                    }
                 },
                 modifier = modifier
                     .fillMaxWidth()
@@ -194,7 +197,9 @@ fun SingleRecordCard(
     accountRecord: AccountRecord,
     modifier: Modifier = Modifier
 ){
-    val dollarSign: String = if(accountRecord.money>=0) "+" else "-"
+    val e = listOf("飲食","娛樂","學習","交通","用品","醫療")
+    val dollarSign: String = if(accountRecord.iconString in e) "-" else "+"
+    //val dollarSign: String = if(accountRecord.money>=0) "+" else "-"
     val color = HexToJetpackColor.getColor("FF9747")
 
     Surface (

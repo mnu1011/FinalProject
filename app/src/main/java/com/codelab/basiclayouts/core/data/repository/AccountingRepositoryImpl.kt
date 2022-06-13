@@ -17,19 +17,19 @@ class AccountingRepositoryImpl(
         dao.addAccount(userAccount)
     }
 
-    override fun getUserAccount(): Flow<List<UserAccount>> {
+    override suspend fun getUserAccount(): List<UserAccount> {
         return dao.getUserAccount()
     }
 
-    override fun getCardsList(): Flow<List<UserCard>> {
+    override suspend fun getCardsList(): List<UserCard> {
         return dao.getCardsList()
     }
 
-    override fun getFriendsList(): Flow<List<UserFriend>> {
+    override suspend fun getFriendsList(): List<UserFriend> {
         return dao.getFriendsList()
     }
 
-    override fun getGroupsList(): Flow<List<UserGroup>> {
+    override suspend fun getGroupsList(): List<UserGroup> {
         return dao.getGroupsList()
     }
 
@@ -43,19 +43,19 @@ class AccountingRepositoryImpl(
     }
 
 
-    override fun getRecordByDate(date: String): Flow<List<UserRecord>> {
+    override suspend fun getRecordByDate(date: String): List<UserRecord> {
         return dao.getRecordByDate(date)
     }
 
-    override fun getRecordByName(name: String): Flow<List<UserRecord>> {
+    override suspend fun getRecordByName(name: String): List<UserRecord> {
         return dao.getRecordByName(name)
     }
 
-    override fun getRecordByOption(filterOption: FilterOption): Flow<List<UserRecord>> {
+    override suspend fun getRecordByOption(filterOption: FilterOption): List<UserRecord> {
         return dao.getAllRecords()
     }
 
-    override fun getRecordByTimeInterval(timeInterval: String): Flow<List<UserRecord>> {
+    override suspend fun getRecordByTimeInterval(timeInterval: String): List<UserRecord> {
         return dao.getAllRecords()
     }
 

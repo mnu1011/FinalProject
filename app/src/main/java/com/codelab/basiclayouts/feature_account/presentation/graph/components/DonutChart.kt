@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -39,6 +40,13 @@ fun PieChart(
     isDonut: Boolean = true,
     percentColor: Color = Color.White
 ) {
+    var flag = 0
+    for (i in progress) flag++
+    for (i in progress){
+        if(i!=0f) break
+        else flag--
+    }
+    if(flag == 0) return
 
     if (progress.isEmpty() || progress.size != colors.size) return
 

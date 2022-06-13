@@ -19,15 +19,15 @@ import com.codelab.basiclayouts.feature_account.presentation.graph.GraphViewMode
 import com.codelab.basiclayouts.feature_account.presentation.record_list.components.HexToJetpackColor
 
 @Composable
-fun GraphToggleButtonRow(graphViewModel: GraphViewModel , optionList: List<String>) {
+fun GraphToggleButtonRow(graphViewModel: GraphViewModel , optionList: List<String>, is_expense: Boolean) {
     val options = optionList
-    var selectedOption by remember {
-        mutableStateOf("Year")
-    }
-    val onSelectionChange = { text: String ->
-        selectedOption = text
-        graphViewModel.setGraphInterval(text)
-    }
+//    var selectedOption by remember {
+//        mutableStateOf("Day")
+//    }
+//    val onSelectionChange = { text: String ->
+//        selectedOption = text
+//        graphViewModel.setGraphInterval(text)
+//    }
     val color = HexToJetpackColor.getColor("FF9747")
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -54,10 +54,12 @@ fun GraphToggleButtonRow(graphViewModel: GraphViewModel , optionList: List<Strin
                             ),
                         )
                         .clickable {
-                            onSelectionChange(text)
+                            graphViewModel.setGraphInterval(text)
+                            if(is_expense) graphViewModel.getExpenseDataFromDatabase()
+                            else graphViewModel.getIncomeDataFromDatabase()
                         }
                         .background(
-                            if (text == selectedOption) {
+                            if (text == graphViewModel.graphInterval) {
                                 color
                             } else {
                                 Color.LightGray

@@ -19,12 +19,18 @@ class HomepageViewModel @Inject constructor(
     val friendList: List<FriendInfo>
         get() = _friendList
 
-    // 下面這是展示用 到時候要移到初始頁面initialize卡片
-    fun addCards(){
+    init {
         viewModelScope.launch {
             accountingUseCases.cardInit()
         }
     }
+
+    // 下面這是展示用 到時候要移到初始頁面initialize卡片
+//    fun addCards(){
+//        viewModelScope.launch {
+//            accountingUseCases.cardInit()
+//        }
+//    }
 }
 
 private fun getFriendData(): List<FriendInfo>{

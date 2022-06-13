@@ -50,7 +50,6 @@ fun CollectionBook(onClickCollectionBook: () -> Unit = {}, homepageViewModel: Ho
                     onClickLabel = "Book",
                     onClick = {
                         onClickCollectionBook()
-                        homepageViewModel.addCards()
                     }
                 )
         )

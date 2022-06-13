@@ -1,5 +1,6 @@
 package com.codelab.basiclayouts.core.domain.use_case
 
+import android.util.Log
 import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.core.data.*
 import com.codelab.basiclayouts.core.domain.repository.AccountingRepository
@@ -17,7 +18,7 @@ class AccountingUseCases(private val repository: AccountingRepository) {
 
     // 初始頁面輸入完名字進入主畫面時，使用這個function初始化卡牌資訊
     suspend fun cardInit(){
-        for(i in 0..10) {
+        for(i in 0..9) {
             repository.addCard(
                 UserCard(
                     id = i,
@@ -38,15 +39,11 @@ class AccountingUseCases(private val repository: AccountingRepository) {
         )
     }
 
-    // 這個function外面用不到 只是用來把flow<list>轉成list
-    private suspend fun <T> Flow<List<T>>.flattenToList() =
-        flatMapConcat { it.asFlow() }.toList()
-
     // 重新啟動app時可以看userAccount來決定自己是不是第一次進入app
     // 使用群組功能也需要拿到這個函式回傳的serverID
     // list[0]存的是使用者的名字跟server_ID 這個list只有一個值
     suspend fun getUserAccount(): String {
-        val accountTableList = repository.getUserAccount().flattenToList()
+        val accountTableList = repository.getUserAccount()
         return if(accountTableList.isNotEmpty())
             accountTableList[0].server_id
         else
@@ -57,7 +54,7 @@ class AccountingUseCases(private val repository: AccountingRepository) {
     // 可以知道自己現在有哪幾張卡牌
     // 下面的cardList是固定data 在petCardData.kt裡面
     suspend fun getCardsList(): List<PetCard> {
-        val cardTableList = repository.getCardsList().flattenToList()
+        val cardTableList = repository.getCardsList()
         val returnList = cardList
         for(i in 0..9){
             returnList[i].available = cardTableList[i].available
@@ -65,11 +62,16 @@ class AccountingUseCases(private val repository: AccountingRepository) {
         return returnList
     }
 
+    // 當群組中收集到卡片時，傳給這一個function(1-10表示第幾張牌)
+    // 接下來他會自動讓這張牌變available
+    suspend fun changeCardStatus(cardId: Int) {
+        repository.changeCardStatus(cardId)
+    }
 
     // 主畫面會需要這個function來查看好友列表
     // 由於database沒有存照片，目前是用寫死的FriendData.kt中的friendsList
     suspend fun getFriendsList(): List<FriendInfo> {
-        val friendTableList = repository.getFriendsList().flattenToList()
+        val friendTableList = repository.getFriendsList()
         val returnList = friendsList
         for(i in friendTableList.indices){
             if(i> friendsList.size-1){
@@ -83,12 +85,6 @@ class AccountingUseCases(private val repository: AccountingRepository) {
             }
         }
         return returnList
-    }
-
-    // 當群組中收集到卡片時，傳給這一個function(1-10表示第幾張牌)
-    // 接下來他會自動讓這張牌變available
-    suspend fun changeCardStatus(cardId: Int) {
-        repository.changeCardStatus(cardId)
     }
 
     // 記帳用的函式 需要傳兩個參數 第一個是你原本的type，第二個是isExpense(是支出)
@@ -106,7 +102,8 @@ class AccountingUseCases(private val repository: AccountingRepository) {
     // 日曆按下去時要把viewModel的時間給這個function
     // 要注意傳進來的date要跟你設定的格式一模一樣
     suspend fun getRecordByDate(date: String): List<AccountRecord> {
-        val recordTableList = repository.getRecordByDate(date).flattenToList()
+        val recordTableList = repository.getRecordByDate(date)
+
         val returnList = mutableListOf<AccountRecord>()
         for(i in recordTableList.indices){
             returnList.add(
@@ -123,7 +120,7 @@ class AccountingUseCases(private val repository: AccountingRepository) {
 
     // search 紀錄輸入名字後岸搜尋按鈕 要呼叫這個function 然後把viewModel存的textfield值放到name參數
     suspend fun getRecordByName(name: String): List<AccountRecord> {
-        val recordTableList = repository.getRecordByName(name).flattenToList()
+        val recordTableList = repository.getRecordByName(name)
         val returnList = mutableListOf<AccountRecord>()
         for(i in recordTableList.indices){
             returnList.add(
@@ -141,7 +138,7 @@ class AccountingUseCases(private val repository: AccountingRepository) {
     // filter按下確認後進入搜尋結果畫面要顯示的list就是這裡回傳的
     // 要傳入選項filter進來
     suspend fun getRecordByOption(filterOption: FilterOption): List<AccountRecord> {
-        val recordTableList = repository.getRecordByOption(filterOption).flattenToList()
+        val recordTableList = repository.getRecordByOption(filterOption)
         val returnList = mutableListOf<AccountRecord>()
         val priceHighNull: Boolean = filterOption.priceHigh==null
         val priceLowNull: Boolean = filterOption.priceLow==null
@@ -188,11 +185,11 @@ class AccountingUseCases(private val repository: AccountingRepository) {
 
     // 這個function會在graph用到 按下Day Year Month會觸發這些
     suspend fun getRecordByTimeInterval(isExpense: Boolean, currentDate: String, timeInterval: String): List<AccountTypeTotalData> {
-        val recordTableList = repository.getRecordByTimeInterval(timeInterval).flattenToList()
+        val recordTableList = repository.getRecordByTimeInterval(timeInterval)
         val tmpList = mutableListOf<AccountRecord>()
         var returnList = mutableListOf<AccountTypeTotalData>()
 
-        if(isExpense){
+        if(!isExpense){
            returnList =  mutableListOf<AccountTypeTotalData>(
                 AccountTypeTotalData("打工", 0.0f, HexToJetpackColor.getColor("FF9898"), 0),
                 AccountTypeTotalData("薪水", 0.0f, HexToJetpackColor.getColor("5388D8"), 0),
@@ -279,6 +276,29 @@ class AccountingUseCases(private val repository: AccountingRepository) {
 
         for(i in returnList.indices){
             returnList[i].percent = returnList[i].money.toFloat()/totalMoney
+        }
+
+        if(totalMoney==0.0f){
+            if(!isExpense){
+                return mutableListOf<AccountTypeTotalData>(
+                    AccountTypeTotalData("打工", 0.0f, HexToJetpackColor.getColor("FF9898"), 0),
+                    AccountTypeTotalData("薪水", 0.0f, HexToJetpackColor.getColor("5388D8"), 0),
+                    AccountTypeTotalData("獎金", 0.0f, HexToJetpackColor.getColor("F4BE37"), 0),
+                    AccountTypeTotalData("股票", 0.0f, HexToJetpackColor.getColor("FAA73C"), 0),
+                    AccountTypeTotalData("投資", 0.0f, HexToJetpackColor.getColor("FF9040"), 0),
+                    AccountTypeTotalData("租金", 0.0f, HexToJetpackColor.getColor("00AF54"), 0),
+                )
+            }
+            else{
+                return mutableListOf<AccountTypeTotalData>(
+                    AccountTypeTotalData("飲食", 0.0f, HexToJetpackColor.getColor("7A96EB"), 0),
+                    AccountTypeTotalData("娛樂", 0.0f, HexToJetpackColor.getColor("B9E2FC"), 0),
+                    AccountTypeTotalData("學習", 0.0f, HexToJetpackColor.getColor("F9DA8B"), 0),
+                    AccountTypeTotalData("交通", 0.0f, HexToJetpackColor.getColor("6CD534"), 0),
+                    AccountTypeTotalData("用品", 0.0f, HexToJetpackColor.getColor("79EA7A"), 0),
+                    AccountTypeTotalData("醫療", 0.0f, HexToJetpackColor.getColor("85FFC0"), 0),
+                )
+            }
         }
 
         return returnList.toList()

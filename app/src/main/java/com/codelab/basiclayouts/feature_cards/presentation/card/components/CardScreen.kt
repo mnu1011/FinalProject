@@ -94,7 +94,8 @@ fun CardBody(petCard: PetCard){
     ) {
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height(20.dp))
-            Text(text = petCard.name, modifier = Modifier, fontSize = 50.sp, fontWeight = FontWeight.Bold)
+            Text(text = if(petCard.available) petCard.name
+            else "Unknown", modifier = Modifier, fontSize = 50.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(20.dp))
             Card(modifier = Modifier
                 .width(210.dp)

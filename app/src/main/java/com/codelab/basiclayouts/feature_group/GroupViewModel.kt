@@ -7,12 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.core.domain.use_case.AccountingUseCases
 import com.codelab.basiclayouts.feature_group.group_create.UserData
 import com.codelab.basiclayouts.feature_group.group_create.ownedMonsterList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,6 +54,12 @@ class GroupViewModel @Inject constructor(
 
     //進入群組時更新, readyToHatch也要更新
     fun updateHatchProgress(){}
+
+    fun addCard(id: Int){
+        viewModelScope.launch {
+            accountingUseCases.changeCardStatus(id)
+        }
+    }
 }
 
 private fun getMyCollection(): List<MonsterData> {

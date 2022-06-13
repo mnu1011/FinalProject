@@ -152,7 +152,7 @@ fun IncomeGraphBody(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GraphToggleButtonRow(graphViewModel, timeInterval)
+            GraphToggleButtonRow(graphViewModel, timeInterval, false)
             Spacer(modifier = Modifier.height(10.dp))
             PieChart(
                 modifier = Modifier.size(200.dp),

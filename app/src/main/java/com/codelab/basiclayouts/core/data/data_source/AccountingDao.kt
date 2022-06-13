@@ -14,19 +14,19 @@ interface AccountingDao {
     suspend fun addAccount(userAccount: UserAccount)
 
     @Query("SELECT * FROM user_account")
-    fun getUserAccount(): Flow<List<UserAccount>>
+    suspend fun getUserAccount(): List<UserAccount>
 
     @Query("SELECT * FROM user_card")
-    fun getCardsList(): Flow<List<UserCard>>
+    suspend fun getCardsList(): List<UserCard>
 
     @Query("Update user_card SET available = 1 WHERE id = :cardId")
     suspend fun changeCardStatus(cardId: Int)
 
     @Query("SELECT * FROM user_friend")
-    fun getFriendsList(): Flow<List<UserFriend>>
+    suspend fun getFriendsList(): List<UserFriend>
 
     @Query("SELECT * FROM user_group")
-    fun getGroupsList(): Flow<List<UserGroup>>
+    suspend fun getGroupsList(): List<UserGroup>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRecord(userRecord: UserRecord)
@@ -38,12 +38,12 @@ interface AccountingDao {
     suspend fun addGroup(userGroup: UserGroup)
 
     @Query("SELECT * FROM user_record WHERE date = :date")
-    fun getRecordByDate(date: String): Flow<List<UserRecord>>
+    suspend fun getRecordByDate(date: String): List<UserRecord>
 
     @Query("SELECT * FROM user_record WHERE record_name = :name")
-    fun getRecordByName(name: String): Flow<List<UserRecord>>
+    suspend fun getRecordByName(name: String): List<UserRecord>
 
     @Query("SELECT * FROM user_record")
-    fun getAllRecords(): Flow<List<UserRecord>>
+    suspend fun getAllRecords(): List<UserRecord>
 
 }

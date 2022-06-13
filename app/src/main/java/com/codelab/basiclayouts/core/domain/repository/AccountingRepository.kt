@@ -12,15 +12,15 @@ interface AccountingRepository {
 
     suspend fun addAccount(userAccount: UserAccount)
 
-    fun getUserAccount():Flow<List<UserAccount>>
+    suspend fun getUserAccount():List<UserAccount>
 
     // 主畫面用到的
-    fun getCardsList(): Flow<List<UserCard>>
+    suspend fun getCardsList(): List<UserCard>
 
-    fun getFriendsList(): Flow<List<UserFriend>>
+    suspend fun getFriendsList(): List<UserFriend>
 
     // 群組頁面用到的
-    fun getGroupsList(): Flow<List<UserGroup>>
+    suspend fun getGroupsList(): List<UserGroup>
 
 
     suspend fun changeCardStatus(cardId: Int)
@@ -31,13 +31,13 @@ interface AccountingRepository {
 
     // 紀錄頁面用到的
 
-    fun getRecordByDate(date: String): Flow<List<UserRecord>>
+    suspend fun getRecordByDate(date: String): List<UserRecord>
 
-    fun getRecordByName(name: String): Flow<List<UserRecord>>
+    suspend fun getRecordByName(name: String): List<UserRecord>
 
-    fun getRecordByOption(filterOption: FilterOption): Flow<List<UserRecord>>
+    suspend fun getRecordByOption(filterOption: FilterOption): List<UserRecord>
 
     // 圖表頁面用到的
-    fun getRecordByTimeInterval(timeInterval: String): Flow<List<UserRecord>>
+    suspend fun getRecordByTimeInterval(timeInterval: String): List<UserRecord>
 
 }

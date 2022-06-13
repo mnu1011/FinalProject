@@ -31,7 +31,7 @@ import com.codelab.basiclayouts.navigation.Screen
 import com.codelab.basiclayouts.feature_account.presentation.record_list.components.HexToJetpackColor
 import com.codelab.basiclayouts.feature_account.presentation.search_filter.FilterViewModel
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
-
+import java.util.logging.Filter
 
 
 @Composable
@@ -91,7 +91,7 @@ fun FilterBody(
        Spacer(modifier = Modifier.height(10.dp))
        PriceRangeRow(filterViewModel)
        Spacer(modifier = Modifier.height(30.dp))
-       ConfirmButtonRow(navController)
+       ConfirmButtonRow(navController, filterViewModel)
    }
 }
 
@@ -346,6 +346,7 @@ fun InterestRow(filterViewModel: FilterViewModel, typeList: List<String>, modifi
 @Composable
 fun ConfirmButtonRow(
     navController: NavController,
+    filterViewModel: FilterViewModel,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -359,7 +360,10 @@ fun ConfirmButtonRow(
             backgroundColor = color,
             modifier = Modifier
                 .padding(5.dp)
-                .clickable {}
+                .clickable {
+                    filterViewModel.getFilterDataByOption()
+                    navController.navigate(Screen.FilterResultScreen.route)
+                }
                 .width(250.dp)
         ) {
             Text(
@@ -372,10 +376,6 @@ fun ConfirmButtonRow(
                         shape = RoundedCornerShape(
                             size = 12.dp,
                         ),
-                    )
-                    .clickable(
-                        enabled = true,
-                        onClick = { navController.navigate(Screen.FilterResultScreen.route) }
                     ),
                 textAlign = TextAlign.Center
             )

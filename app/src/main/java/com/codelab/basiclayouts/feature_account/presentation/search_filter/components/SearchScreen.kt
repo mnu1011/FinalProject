@@ -125,23 +125,23 @@ fun InputFilterRow(
             modifier = Modifier.width(250.dp)
         )
         Spacer(modifier = Modifier.width(10.dp))
-        IconButton(onClick = {}) {
+        IconButton(onClick = {
+            filterViewModel.getFilterDataByName()
+            navController.navigate(Screen.FilterResultScreen.route)
+        }) {
             Icon(
                 imageVector = Icons.Outlined.Search,
                 contentDescription = null ,
                 modifier = Modifier.size(30.dp)
             )
         }
-        IconButton(onClick = {}) {
+        IconButton(onClick = {
+            navController.navigate(Screen.SortFilterScreen.route)
+        }) {
             Icon(
                 imageVector = Icons.Outlined.List,
                 contentDescription = null,
-                modifier = Modifier
-                    .size(30.dp)
-                    .clickable(
-                        enabled = true,
-                        onClick = { navController.navigate(Screen.SortFilterScreen.route) }
-                    )
+                modifier = Modifier.size(30.dp)
             )
         }
     }

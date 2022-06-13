@@ -87,18 +87,23 @@ fun Navigation() {
                 )
             }
             composable(route = Screen.CardCollectionScreen.route) {
+                cardViewModel.getCardsFromDatabase()
                 CardCollectionScreen(
                     navController,
                     cardViewModel
                 )
             }
             composable(route = Screen.ExpenseGraphScreen.route) {
+                //graphViewModel.initalInterval()
+                graphViewModel.getExpenseDataFromDatabase()
                 ExpenseGraphScreen(
                     navController,
                     graphViewModel
                 )
             }
             composable(route = Screen.IncomeGraphScreen.route) {
+                //graphViewModel.initalInterval()
+                graphViewModel.getIncomeDataFromDatabase()
                 IncomeGraphScreen(
                     navController,
                     graphViewModel
@@ -112,12 +117,14 @@ fun Navigation() {
                 )
             }
             composable(route = Screen.SearchScreen.route) {
+                filterViewModel.clearNameFilter()
                 SearchScreen(
                     navController,
                     filterViewModel
                 )
             }
             composable(route = Screen.SortFilterScreen.route) {
+                filterViewModel.clearOptionFilter()
                 FilterScreen(
                     navController,
                     filterViewModel
